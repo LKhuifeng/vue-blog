@@ -1,4 +1,5 @@
 const express = require('express')
+const session = require('express-session')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const model = require('./model')

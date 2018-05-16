@@ -1,18 +1,21 @@
 <template>
-    <div class="login">
-        <div class="login-form">
+    <div class="register">
+        <div class="register-form">
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm">
-                <h3>后台登陆</h3>
+                <h3>注册</h3>
                 <el-form-item prop="name">
                     <el-input v-model="ruleForm.name" placeholder="账号"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input type="password" v-model="ruleForm.password" placeholder="密码"></el-input>
                 </el-form-item>
+                <el-form-item prop="repassword">
+                    <el-input type="password" v-model="ruleForm.repassword" placeholder="确认密码"></el-input>
+                </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">登陆</el-button>
-                    <router-link to="register">
-                        <el-button type="success" plain>注册</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')">确认注册</el-button>
+                    <router-link to="login">
+                        <el-button type="success" plain>返回登录</el-button>
                     </router-link>
                     <div class="other">
                         <a href="#">忘记密码</a>
@@ -24,8 +27,8 @@
 </template>
 
 <script>
-    export default {
-        data() {
+export default {
+    data() {
             const checkName = (rule, value, callback) => {
                 const nameReg = /^[\w\?%&=\-_]+$/
                 if (!value) {
@@ -46,10 +49,20 @@
                     callback()
                 }
             }
+            const checkrepw = (rule, value ,callback) => {
+                if (!value) {
+                    return callback(new Error('确认密码不能为空'))
+                }else if(this.ruleForm.password != value){
+                    return callback(new Error('密码和确认密码不同'))
+                }else{
+                    callback()
+                }
+            }
             return {
                 ruleForm: {
                     name: '',
-                    password: ''
+                    password: '',
+                    repassword: ''
                 },
                 rules: {
                     name: [
@@ -57,6 +70,9 @@
                     ],
                     password: [
                         { validator: checkpw,trigger: 'blur' }
+                    ],
+                    repassword: [
+                        { validator: checkrepw,trigger: 'blur' }
                     ]
                 }
             }
@@ -65,30 +81,31 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.axios.post('/api/admin/AdminLogin',{
+                        this.axios.post('/api/admin/AdminRegister',{
                             name: this.ruleForm.name,
                             password: this.ruleForm.password
                         })
-                            .then((res)=>{
+                            .then(function(res){
+                                console.log(res.data)
                                 if(res.data.code==2){
                                     alert(res.data.msg)
                                 }
                                 else if(res.data.code==1){
                                     alert(res.data.msg)
                                 }else{
-                                    alert("成功登陆")
-                                    this.$router.replace({ path: 'admin'})
+                                    alert("成功注册")
                                 }
-                            }).catch((function(err){
+                            })
+                            .catch(function(err){
                                 console.log(err)
-                            }))
+                            })
                     } else {
                         console.log('error submit!!')
                         return false;
                     }
                 })
             },
-            resigerForm(){
+            loginForm(){
                 if(false){
                     alert('error!')
                 }else{
@@ -102,18 +119,18 @@
                 }
             }
         },
-    }
+}
 </script>
 
 <style lang="less">
-    .login{
+    .register{
         display: flex;
         justify-content: center;
         align-items: center;
         width: 100%;
         min-height: 100vh;
         background: #001e3e;
-        .login-form{
+        .register-form{
             width: 400px;
             padding: 12px 36px;
             border: 1px solid #ddd;
@@ -138,4 +155,3 @@
         }
     }
 </style>
-

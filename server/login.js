@@ -20,4 +20,25 @@ Router.post('/AdminLogin',function(req,res){
     })
 })
 
+Router.post('/AdminRegister',function(req,res){
+    const { name, password, repassword } = req.body
+    const registerOne = new User({
+        user: name,
+        pwd: password
+    })
+    User.findOne({"user":name},function(e,d){
+        if(d){
+            return res.json({code:2,msg:'该账号已存在'})
+        }else{
+            registerOne.save(function(e,d){
+                if(e){
+                    return res.json({code:1,msg:'后端出现错误'})
+                }else{
+                    return res.json(d)
+                }
+            })
+        }
+    })
+})
+
 module.exports = Router
