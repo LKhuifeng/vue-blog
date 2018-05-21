@@ -21,4 +21,8 @@ body{
   text-align: center;
   color: #2c3e50;
 }
+
+.el-dialog--center .el-dialog__body{
+    text-align: center;
+}
 </style>

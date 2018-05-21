@@ -14,12 +14,24 @@
                     <router-link to="register">
                         <el-button type="success" plain>注册</el-button>
                     </router-link>
-                    <div class="other">
+                    <el-button type="text" class="other">
                         <a href="#">忘记密码</a>
-                    </div>
+                    </el-button>
                 </el-form-item>
             </el-form>
         </div>
+        <!--提示框-->
+        <el-dialog
+            title="登录失败"
+            :visible.sync="centerDialogVisible"
+            width="30%"
+            center>
+            <span>{{dialogMsg}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -47,6 +59,8 @@
                 }
             }
             return {
+                centerDialogVisible: false,
+                dialogMsg: '',
                 ruleForm: {
                     name: '',
                     password: ''
@@ -71,12 +85,13 @@
                         })
                             .then((res)=>{
                                 if(res.data.code==2){
-                                    alert(res.data.msg)
+                                    this.centerDialogVisible = true
+                                    this.dialogMsg = res.data.msg
                                 }
                                 else if(res.data.code==1){
-                                    alert(res.data.msg)
+                                    this.centerDialogVisible = true
+                                    this.dialogMsg = res.data.msg
                                 }else{
-                                    alert("成功登陆")
                                     this.$router.replace({ path: 'admin'})
                                 }
                             }).catch((function(err){
@@ -88,19 +103,6 @@
                     }
                 })
             },
-            resigerForm(){
-                if(false){
-                    alert('error!')
-                }else{
-                    this.axios.get('/api/router/info')
-                        .then(function(res){
-                            console.log(res)
-                        })
-                        .catch(function(err){
-                            console.log(err)
-                        })
-                }
-            }
         },
     }
 </script>

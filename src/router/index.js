@@ -7,7 +7,7 @@ import admin from '@/components/admin'
 
 Vue.use(Router)
 
-export default new Router({
+const vueRouter = new Router({
   routes: [
     {
       path: '/',
@@ -30,3 +30,5 @@ export default new Router({
     }
   ]
 })
+
+export default vueRouter

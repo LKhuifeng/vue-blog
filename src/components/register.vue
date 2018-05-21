@@ -23,6 +23,27 @@
                 </el-form-item>
             </el-form>
         </div>
+        <!--提示框-->
+        <el-dialog
+            title="注册失败"
+            :visible.sync="centerDialogVisible"
+            width="30%"
+            center>
+            <span>{{dialogMsg}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            :visible.sync="centerDialog2"
+            width="30%"
+            center>
+            <span>注册成功</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="registerSuccess()">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -59,6 +80,9 @@ export default {
                 }
             }
             return {
+                dialogMsg: '',
+                centerDialogVisible: false,
+                centerDialog2: false,
                 ruleForm: {
                     name: '',
                     password: '',
@@ -85,15 +109,17 @@ export default {
                             name: this.ruleForm.name,
                             password: this.ruleForm.password
                         })
-                            .then(function(res){
+                            .then((res)=>{
                                 console.log(res.data)
                                 if(res.data.code==2){
-                                    alert(res.data.msg)
+                                    this.dialogMsg = res.data.msg
+                                    this.centerDialogVisible = true
                                 }
                                 else if(res.data.code==1){
-                                    alert(res.data.msg)
+                                    this.dialogMsg = res.data.msg
+                                    this.centerDialogVisible = true
                                 }else{
-                                    alert("成功注册")
+                                    this.centerDialog2 = true
                                 }
                             })
                             .catch(function(err){
@@ -117,6 +143,10 @@ export default {
                             console.log(err)
                         })
                 }
+            },
+            registerSuccess(){
+                this.centerDialog2 = false
+                this.$router.replace({ path: 'login'})
             }
         },
 }
