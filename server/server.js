@@ -19,7 +19,7 @@ app.use(session({
     secret:'gaisession',//密匙，与cookieParser一致
     cookie:{
         path: '/',//session的路径要一致否则不会创建
-        maxAge: 200000
+        maxAge: 2000000
     },
     resave: false,
     saveUninitialized: true

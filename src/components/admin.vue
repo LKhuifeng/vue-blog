@@ -1,14 +1,20 @@
 <template>
-    <div>
-        <p>已经登录</p>
-        <el-button type="primary" @click="outLogin()">注销</el-button>
-    </div>
+    <el-container>
+        <slide></slide>
+        <container></container>
+    </el-container>
 </template>
 
 <script>
+import slide from './components/slide'
+import container from './components/container'
+
 export default {
+    components: {slide,container},  
     data(){
-        return {}
+        return {
+            items:[]
+        }
     },
     beforeCreate: function(){
         var outAdmin = ()=>{
@@ -22,17 +28,6 @@ export default {
             .catch(function(err){
                 console.log(err)
             })
-    },
-    methods:{
-        outLogin(){
-            this.axios.get('/api/admin/outLogin')
-                .then((res)=>{
-                    res.data.code?(alert('后端出错')):(this.$router.replace({ path: 'login'}))
-                })
-                .catch(function(err){
-                    console.log(err)
-                })
-        }
     }
 }
 </script>
